@@ -64,7 +64,7 @@ namespace Abyss.EditorTools
             _keepClear.Clear();
 
             var env = new GameObject("Environment").transform;
-            var terrain = Spawn("Environment/seafloor_terrain", _c.World, env, Vector3.zero, Quaternion.identity, 1f, false);
+            var terrain = Spawn("Environment/seafloor_terrain", _c.Seafloor, env, Vector3.zero, Quaternion.identity, 1f, false);
             if (terrain == null) { Debug.LogError("[ABYSS] terrain fbx missing, run the blender build first"); return; }
             terrain.name = "Seafloor";
             var mf = terrain.GetComponentInChildren<MeshFilter>();
@@ -142,12 +142,14 @@ namespace Abyss.EditorTools
         {
             var root = Group(env, "Area1_Descent");
             // the arch frames the view toward the reef: first thing you see, gives a sense of scale
-            var arch = Spawn("Environment/rock_arch", _c.World, root, Ground(L(13, 0), -0.6f), Quaternion.LookRotation(_r), 1.15f);
-            Scatter(root, "Environment/rock_boulder_a", _c.World, 6, L(0, 0), 9, 16, 0.6f, 1.6f, -0.3f);
-            Scatter(root, "Environment/rock_slab_a", _c.World, 4, L(0, 0), 8, 15, 0.8f, 1.5f, -0.25f);
-            Scatter(root, "Environment/rock_spire_a", _c.World, 3, L(-4, 0), 12, 18, 1.0f, 1.8f, -0.4f);
+            // two scanned outcrops either side of the path, a natural gateway toward the reef
+            Spawn(S("scan_rock_outcrop"), M("scan_rock_outcrop"), root, Ground(L(13, -5.5f), -0.4f), Quaternion.LookRotation(_r), 0.9f);
+            Spawn(S("scan_rock_outcrop"), M("scan_rock_outcrop"), root, Ground(L(14, 5.5f), -0.6f), Quaternion.LookRotation(-_r) * Quaternion.Euler(0, 25, 0), 0.75f);
+            Scatter(root, S("scan_boulder"), M("scan_boulder"), 6, L(0, 0), 9, 16, 0.6f, 1.3f, -0.15f);
+            Scatter(root, S("scan_boulder_flat"), M("scan_boulder_flat"), 4, L(0, 0), 8, 15, 0.7f, 1.3f, -0.1f);
+            Scatter(root, S("scan_rock_coast"), M("scan_rock_coast"), 3, L(-4, 0), 12, 18, 1.0f, 1.6f, -0.2f);
             Scatter(root, "Environment/seagrass_clump", _c.WorldTwoSided, 30, L(2, 0), 3, 16, 0.8f, 1.4f, 0f);
-            Scatter(root, "Coral/coral_brain", _c.World, 4, L(6, 6), 0, 5, 0.6f, 1.0f, -0.1f);
+            Scatter(root, S("scan_coral_brain_a"), M("scan_coral_brain_a"), 3, L(6, 6), 0, 5, 0.7f, 1.1f, -0.1f);
 
             var kelp = Group(root, "KelpBed");
             for (int i = 0; i < 28; i++)
@@ -163,19 +165,18 @@ namespace Abyss.EditorTools
         static void BuildReef(Transform env)
         {
             var root = Group(env, "Area2_Reef");
-            Scatter(root, "Coral/coral_brain", _c.World, 10, L(26, 0), 3, 12, 0.6f, 1.4f, -0.12f);
-            Scatter(root, "Coral/coral_staghorn", _c.World, 14, L(26, 0), 2.5f, 12, 0.8f, 1.5f, -0.05f);
-            Scatter(root, "Coral/coral_table", _c.World, 8, L(26, 0), 3, 11, 0.8f, 1.6f, -0.05f);
-            Scatter(root, "Coral/coral_seafan", _c.WorldTwoSided, 9, L(26, 0), 4, 12, 0.8f, 1.3f, -0.05f);
-            Scatter(root, "Coral/sponge_barrel", _c.World, 7, L(26, 0), 4, 12, 0.7f, 1.3f, -0.1f);
-            Scatter(root, "Environment/rock_boulder_b", _c.World, 8, L(26, 0), 7, 14, 0.8f, 1.6f, -0.4f);
-            Scatter(root, "Environment/rock_cluster_a", _c.World, 6, L(26, 0), 6, 14, 0.7f, 1.3f, -0.3f);
+            // real reefs grow in dense mixed patches on rock, not sprinkled evenly
+            var corals = _c.Scans.Keys.Where(k => k.StartsWith("scan_coral_")).OrderBy(k => k).ToArray();
+            foreach (var (fwd, right, radius) in new[] { (19f, -6f, 3.4f), (23f, 6.5f, 3.2f), (31f, -7f, 3.6f), (33f, 6f, 3.0f), (27f, -11f, 2.4f), (21f, 11f, 2.2f), (36f, 0f, 2.6f) })
+                Bommie(root, L(fwd, right), radius, corals);
+            Scatter(root, "Coral/coral_seafan", _c.CoralTwoSided, 9, L(26, 0), 4, 12, 0.8f, 1.3f, -0.05f);
+            Scatter(root, S("scan_boulder"), M("scan_boulder"), 6, L(26, 0), 8, 14, 0.7f, 1.4f, -0.2f);
             Scatter(root, "Environment/seagrass_clump", _c.WorldTwoSided, 20, L(26, 0), 2, 13, 0.7f, 1.2f, 0f);
 
-            Interactable(root, "Coral/coral_brain", _c.World, "reef_brain_coral", L(22, -4), 1.2f);
-            Interactable(root, "Coral/coral_seafan", _c.WorldTwoSided, "reef_sea_fan", L(27, 5), 1.3f);
-            Interactable(root, "InteractiveObjects/giant_clam", _c.World, "reef_giant_clam", L(31, -2.5f), 1.4f);
-            Interactable(root, "Coral/coral_staghorn", _c.World, "reef_staghorn", L(24, 4), 1.2f);
+            Interactable(root, S("scan_coral_brain_b"), M("scan_coral_brain_b"), "reef_brain_coral", L(22, -3), 1.1f);
+            Interactable(root, "Coral/coral_seafan", _c.CoralTwoSided, "reef_sea_fan", L(27, 5), 1.3f);
+            Interactable(root, S("scan_conch"), M("scan_conch"), "reef_conch", L(25, -1.5f), 2.2f);
+            Interactable(root, S("scan_coral_staghorn"), M("scan_coral_staghorn"), "reef_staghorn", L(25, 3.5f), 1.0f);
             School(root, "FishSchool_Reef", L(26, 0) + Vector3.up * 2.5f, 50, new Vector3(12, 3, 10), 0.9f);
         }
 
@@ -187,8 +188,8 @@ namespace Abyss.EditorTools
             Interactable(root, "InteractiveObjects/info_marker", _c.World, "exhibit_light", L(27.5f, -21.5f), 1.6f);
             Interactable(root, "InteractiveObjects/info_marker", _c.World, "exhibit_pressure", L(30.5f, -26.5f), 1.6f);
             Interactable(root, "InteractiveObjects/info_marker", _c.World, "exhibit_currents", L(33f, -22f), 1.6f);
-            Scatter(root, "Environment/rock_slab_a", _c.World, 5, c, 6, 10, 1.0f, 1.8f, -0.3f);
-            Scatter(root, "Environment/rock_boulder_a", _c.World, 4, c, 7, 11, 0.9f, 1.6f, -0.3f);
+            Scatter(root, S("scan_rock_coast"), M("scan_rock_coast"), 5, c, 6, 10, 1.0f, 1.6f, -0.2f);
+            Scatter(root, S("scan_boulder_flat"), M("scan_boulder_flat"), 4, c, 7, 11, 0.9f, 1.4f, -0.1f);
             Scatter(root, "Environment/seagrass_clump", _c.WorldTwoSided, 10, c, 4, 10, 0.7f, 1.1f, 0f);
             Destination(root, "dest_exhibition", "Exhibition", L(29, -23));
         }
@@ -196,18 +197,20 @@ namespace Abyss.EditorTools
         static void BuildWreck(Transform env)
         {
             var root = Group(env, "Area4_Wreck");
+            // settled on its side in the sand, bow slightly down
             var yaw = Quaternion.LookRotation(Dir(1, 0.6f));
-            Spawn("Structures/wreck_hull", _c.World, root, Ground(L(47, 23), -1.1f), yaw * Quaternion.Euler(0, 0, 8), 1f);
-            Spawn("Structures/wreck_mast", _c.World, root, Ground(L(43, 15), -0.1f), Quaternion.LookRotation(Dir(0.3f, -1)), 1f);
+            Spawn(S("scan_shipwreck"), M("scan_shipwreck"), root, Ground(L(49, 24), -1.6f), yaw * Quaternion.Euler(4, 0, 24), 1f);
             for (int i = 0; i < 4; i++)
-                Spawn("Structures/wreck_crate", _c.World, root, Ground(L(43 + Rand(-3, 4), 24 + Rand(-4, 4)), -0.25f), Quaternion.Euler(Rand(-10, 10), Rand(0, 360), Rand(-15, 15)), Rand(0.7f, 1.1f));
-            Scatter(root, "Environment/rock_boulder_b", _c.World, 5, L(46, 22), 9, 14, 0.8f, 1.5f, -0.4f);
-            Scatter(root, "Coral/sponge_barrel", _c.World, 4, L(46, 22), 5, 10, 0.5f, 0.9f, -0.1f);
-            Scatter(root, "Coral/coral_seafan", _c.WorldTwoSided, 4, L(46, 22), 5, 10, 0.6f, 1.0f, -0.05f);
+                Spawn(S("scan_crate"), M("scan_crate"), root, Ground(L(43 + Rand(-3, 4), 24 + Rand(-4, 4)), -0.15f), Quaternion.Euler(Rand(-10, 10), Rand(0, 360), Rand(-15, 15)), Rand(0.9f, 1.1f));
+            for (int i = 0; i < 3; i++)
+                Spawn(S("scan_barrel"), M("scan_barrel"), root, Ground(L(44 + Rand(-3, 3), 18 + Rand(-2, 3)), -0.1f), Quaternion.Euler(Rand(-80, 80) > 0 ? 90 : 0, Rand(0, 360), Rand(-10, 10)), 1f);
+            Scatter(root, S("scan_boulder"), M("scan_boulder"), 5, L(46, 22), 10, 15, 0.8f, 1.4f, -0.2f);
+            Bommie(root, L(41, 27), 2.2f, _c.Scans.Keys.Where(k => k.StartsWith("scan_coral_")).OrderBy(k => k).ToArray());
+            Scatter(root, "Coral/coral_seafan", _c.CoralTwoSided, 4, L(46, 22), 5, 10, 0.6f, 1.0f, -0.05f);
 
-            var anchor = Interactable(root, "Structures/wreck_anchor", _c.World, "wreck_anchor", L(40.5f, 24.5f), 1.0f);
+            var anchor = Interactable(root, "Structures/wreck_anchor", _c.Rust, "wreck_anchor", L(40.5f, 24.5f), 1.0f);
             if (anchor != null) anchor.transform.rotation = Quaternion.LookRotation(_r) * Quaternion.Euler(72, 0, 0);
-            Interactable(root, "InteractiveObjects/ships_bell", _c.World, "wreck_bell", L(42, 18.5f), 1.0f);
+            Interactable(root, S("scan_compass"), M("scan_compass"), "wreck_compass", L(42, 18.5f), 2.2f);
             Destination(root, "dest_wreck", "The wreck", L(40, 19));
             School(root, "FishSchool_Wreck", L(46, 22) + Vector3.up * 2f, 28, new Vector3(9, 2.5f, 9), 0.6f);
         }
@@ -218,9 +221,9 @@ namespace Abyss.EditorTools
             Spawn("Environment/basalt_columns", _c.World, root, Ground(L(64, -7), -0.3f), Quaternion.Euler(0, 20, 0), 1.3f);
             Interactable(root, "Environment/basalt_columns", _c.World, "deep_columns", L(73, 9), 1.6f);
             Scatter(root, "Coral/anemone_glow", _c.WorldGlow, 14, L(70, 0), 3, 12, 0.8f, 1.6f, -0.05f);
-            Scatter(root, "Coral/tube_worms", _c.World, 8, L(70, 0), 4, 12, 0.8f, 1.4f, -0.05f);
-            Scatter(root, "Environment/rock_spire_a", _c.World, 6, L(70, 0), 9, 18, 1.2f, 2.4f, -0.6f);
-            Scatter(root, "Environment/rock_boulder_a", _c.World, 6, L(68, 0), 7, 15, 1.0f, 2.0f, -0.4f);
+            Scatter(root, "Coral/tube_worms", _c.Coral, 8, L(70, 0), 4, 12, 0.8f, 1.4f, -0.05f);
+            Scatter(root, S("scan_rock_outcrop"), M("scan_rock_outcrop"), 3, L(72, 0), 10, 18, 0.8f, 1.2f, -0.5f);
+            Scatter(root, S("scan_rock_coast"), M("scan_rock_coast"), 6, L(68, 0), 7, 15, 1.2f, 2.0f, -0.3f);
             Interactable(root, "Coral/anemone_glow", _c.WorldGlow, "deep_anemone", L(67.5f, 3), 1.8f);
             Destination(root, "dest_deep", "The deep", L(66, 0));
 
@@ -369,6 +372,25 @@ namespace Abyss.EditorTools
             t.SetParent(parent, false);
             return t;
         }
+
+        static void Bommie(Transform parent, Vector3 c, float radius, string[] corals)
+        {
+            if (corals.Length == 0) return;
+            Spawn(S("scan_boulder_flat"), M("scan_boulder_flat"), parent, Ground(c, -0.25f), Quaternion.Euler(0, Rand(0, 360), 0), radius * 0.45f, false);
+            int n = Mathf.RoundToInt(radius * 9);
+            for (int i = 0; i < n; i++)
+            {
+                float a = Rand(0, Mathf.PI * 2), d = Mathf.Pow(Rand(0, 1), 0.8f) * radius;
+                var p = c + new Vector3(Mathf.Cos(a), 0, Mathf.Sin(a)) * d;
+                if (Blocked(p)) continue;
+                var name = corals[_rng.Next(corals.Length)];
+                Spawn(S(name), M(name), parent, Ground(p, Rand(-0.15f, 0.2f)), Quaternion.Euler(Rand(-12, 12), Rand(0, 360), Rand(-12, 12)), Rand(0.7f, 1.4f), false);
+            }
+            _keepClear.Add((c, radius));
+        }
+
+        static string S(string scan) => $"Scanned/{scan}/{scan}";
+        static Material M(string scan) => _c.Scans.TryGetValue(scan, out var m) ? m : _c.World;
 
         static Mesh Mesh(string rel)
         {

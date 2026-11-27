@@ -18,7 +18,7 @@ Done in session 1:
 
 Not done yet (honest list):
 - never opened in Unity, never built, never on a headset. shaders never compiled.
-- art is first pass. several models need rework (see asset register). no LODs. no texture detail anywhere.
+- art: rocks, corals, wreck and props are real scans now. still code-made and weaker: sea fans, kelp, anemones, fish, the ray. no LODs yet.
 - no demo video or screenshots, because nothing has run yet. none will be faked.
 - no measured performance
 - target headset not confirmed with the client yet (defaults assume Quest 3 / 3S, 72 Hz)
@@ -81,7 +81,7 @@ Tools/
 ## Decisions worth knowing
 
 - **OpenXR only, no Meta SDK.** Everything ABYSS needs is in OpenXR. Keeps it portable and lighter. If the client later wants passthrough or hand tracking, add `com.unity.xr.meta-openxr` / `com.unity.xr.hands`.
-- **Vertex-colour art + one custom shader.** Most of the world has no textures. Cheap on Quest, consistent look, and the whole art set regenerates from one script. The cost: surfaces have no fine detail. If close-up quality isn't good enough on device, the next step is a small set of tileable detail textures, not per-asset textures.
+- **Photoscans for anything you look at closely, generated art for soft filler.** Rocks, corals, the wreck, props are CC0 scans (Poly Haven, Smithsonian) cut down to 1–6k tris with 1k textures. Sea floor uses the generated terrain shape with a scanned sand texture. Look-dev renders in `docs/lookdev`. First pass art looked fake; this is the fix.
 - **UI built from code.** One look everywhere, no prefab drift, text size and high contrast apply to every panel automatically.
 - **Progress resets each launch by default.** Right for exhibitions. Tick `Persist Between Sessions` on ProgressTracker for training use.
 - **72 Hz default.** OpenXR 1.16 doesn't expose a refresh rate request API. If the client wants 90 Hz on Quest 3, that's a small custom OpenXR feature (XR_FB_display_refresh_rate), only worth doing after the 72 Hz numbers are in.

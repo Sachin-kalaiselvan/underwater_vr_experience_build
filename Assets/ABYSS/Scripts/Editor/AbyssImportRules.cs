@@ -23,7 +23,8 @@ namespace Abyss.EditorTools
             m.optimizeMeshPolygons = true;
             m.optimizeMeshVertices = true;
             m.importNormals = ModelImporterNormals.Import;
-            m.importTangents = ModelImporterTangents.None; // no normal maps anywhere
+            // scans use normal maps, everything else is vertex colour only
+            m.importTangents = assetPath.Contains("/Scanned/") ? ModelImporterTangents.CalculateMikk : ModelImporterTangents.None;
             m.addCollider = false;
         }
 
@@ -31,6 +32,17 @@ namespace Abyss.EditorTools
         {
             if (!Ours) return;
             var t = (TextureImporter)assetImporter;
+            if (assetPath.Contains("_normal") || assetPath.Contains("_nor_gl"))
+            {
+                t.textureType = TextureImporterType.NormalMap;
+                t.maxTextureSize = 1024;
+            }
+            else if (assetPath.Contains("/Scanned/"))
+            {
+                t.sRGBTexture = true;
+                t.maxTextureSize = 1024;
+                t.wrapMode = TextureWrapMode.Repeat;
+            }
             if (assetPath.Contains("caustics"))
             {
                 t.textureType = TextureImporterType.Default;

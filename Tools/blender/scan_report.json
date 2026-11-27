@@ -1,0 +1,306 @@
+{
+  "scan_rock_coast": {
+    "source": "Poly Haven: coast_rocks_05",
+    "licence": "CC0",
+    "tris": 2999,
+    "source_tris": 751311,
+    "size_m": [
+      4.01,
+      3.75,
+      1.31
+    ],
+    "maps": [
+      "albedo",
+      "normal"
+    ],
+    "file": "Scanned/scan_rock_coast/scan_rock_coast.fbx"
+  },
+  "scan_rock_outcrop": {
+    "source": "Poly Haven: coast_land_rocks_03",
+    "licence": "CC0",
+    "tris": 6000,
+    "source_tris": 1059276,
+    "size_m": [
+      8.98,
+      5.62,
+      1.51
+    ],
+    "maps": [
+      "albedo",
+      "normal"
+    ],
+    "file": "Scanned/scan_rock_outcrop/scan_rock_outcrop.fbx"
+  },
+  "scan_boulder": {
+    "source": "Poly Haven: boulder_01",
+    "licence": "CC0",
+    "tris": 2000,
+    "source_tris": 65769,
+    "size_m": [
+      1.27,
+      1.82,
+      1.0
+    ],
+    "maps": [
+      "albedo",
+      "normal"
+    ],
+    "file": "Scanned/scan_boulder/scan_boulder.fbx"
+  },
+  "scan_boulder_flat": {
+    "source": "Poly Haven: namaqualand_boulder_02",
+    "licence": "CC0",
+    "tris": 2000,
+    "source_tris": 88040,
+    "size_m": [
+      2.49,
+      1.22,
+      0.85
+    ],
+    "maps": [
+      "albedo",
+      "normal"
+    ],
+    "file": "Scanned/scan_boulder_flat/scan_boulder_flat.fbx"
+  },
+  "scan_rocks_scatter": {
+    "source": "Poly Haven: sand_rocks_small_01",
+    "licence": "CC0",
+    "tris": 3500,
+    "source_tris": 722437,
+    "size_m": [
+      4.63,
+      3.86,
+      0.5
+    ],
+    "maps": [
+      "albedo",
+      "normal"
+    ],
+    "file": "Scanned/scan_rocks_scatter/scan_rocks_scatter.fbx"
+  },
+  "scan_conch": {
+    "source": "Poly Haven: lambis_shell",
+    "licence": "CC0",
+    "tris": 2499,
+    "source_tris": 12498,
+    "size_m": [
+      0.14,
+      0.07,
+      0.05
+    ],
+    "maps": [
+      "albedo",
+      "normal"
+    ],
+    "file": "Scanned/scan_conch/scan_conch.fbx"
+  },
+  "scan_compass": {
+    "source": "Poly Haven: seadogs_compass",
+    "licence": "CC0",
+    "tris": 3000,
+    "source_tris": 11645,
+    "size_m": [
+      0.08,
+      0.14,
+      0.09
+    ],
+    "maps": [
+      "albedo",
+      "normal"
+    ],
+    "file": "Scanned/scan_compass/scan_compass.fbx"
+  },
+  "scan_crate": {
+    "source": "Poly Haven: wooden_crate_01",
+    "licence": "CC0",
+    "tris": 1200,
+    "source_tris": 6576,
+    "size_m": [
+      0.82,
+      0.41,
+      0.35
+    ],
+    "maps": [
+      "albedo",
+      "normal"
+    ],
+    "file": "Scanned/scan_crate/scan_crate.fbx"
+  },
+  "scan_barrel": {
+    "source": "Poly Haven: wooden_barrels_01",
+    "licence": "CC0",
+    "tris": 1500,
+    "source_tris": 11184,
+    "size_m": [
+      0.76,
+      0.76,
+      0.92
+    ],
+    "maps": [
+      "albedo",
+      "normal"
+    ],
+    "file": "Scanned/scan_barrel/scan_barrel.fbx"
+  },
+  "scan_shipwreck": {
+    "source": "Poly Haven: dutch_ship_medium",
+    "licence": "CC0",
+    "tris": 13999,
+    "source_tris": 27898,
+    "size_m": [
+      21.96,
+      5.2,
+      7.97
+    ],
+    "maps": [
+      "albedo",
+      "normal"
+    ],
+    "file": "Scanned/scan_shipwreck/scan_shipwreck.fbx"
+  },
+  "scan_coral_staghorn": {
+    "source": "Poly Haven: si_staghorn",
+    "licence": "CC0",
+    "tris": 4000,
+    "source_tris": 150000,
+    "size_m": [
+      1.09,
+      0.94,
+      0.75
+    ],
+    "maps": [
+      "albedo",
+      "normal"
+    ],
+    "file": "Scanned/scan_coral_staghorn/scan_coral_staghorn.fbx"
+  },
+  "scan_coral_acropora": {
+    "source": "Poly Haven: si_acropora_bush",
+    "licence": "CC0",
+    "tris": 3499,
+    "source_tris": 149999,
+    "size_m": [
+      0.63,
+      0.53,
+      0.8
+    ],
+    "maps": [
+      "albedo",
+      "normal"
+    ],
+    "file": "Scanned/scan_coral_acropora/scan_coral_acropora.fbx"
+  },
+  "scan_coral_cauliflower": {
+    "source": "Poly Haven: si_cauliflower",
+    "licence": "CC0",
+    "tris": 3499,
+    "source_tris": 150000,
+    "size_m": [
+      0.45,
+      0.54,
+      0.31
+    ],
+    "maps": [
+      "albedo",
+      "normal"
+    ],
+    "file": "Scanned/scan_coral_cauliflower/scan_coral_cauliflower.fbx"
+  },
+  "scan_coral_pocillopora": {
+    "source": "Poly Haven: si_pocillopora",
+    "licence": "CC0",
+    "tris": 3500,
+    "source_tris": 150000,
+    "size_m": [
+      0.54,
+      0.59,
+      0.42
+    ],
+    "maps": [
+      "albedo",
+      "normal"
+    ],
+    "file": "Scanned/scan_coral_pocillopora/scan_coral_pocillopora.fbx"
+  },
+  "scan_coral_montipora": {
+    "source": "Poly Haven: si_montipora",
+    "licence": "CC0",
+    "tris": 3000,
+    "source_tris": 150000,
+    "size_m": [
+      0.7,
+      0.39,
+      0.51
+    ],
+    "maps": [
+      "albedo",
+      "normal"
+    ],
+    "file": "Scanned/scan_coral_montipora/scan_coral_montipora.fbx"
+  },
+  "scan_coral_brain_a": {
+    "source": "Poly Haven: si_brain_meander",
+    "licence": "CC0",
+    "tris": 3000,
+    "source_tris": 150000,
+    "size_m": [
+      0.74,
+      0.47,
+      0.64
+    ],
+    "maps": [
+      "albedo",
+      "normal"
+    ],
+    "file": "Scanned/scan_coral_brain_a/scan_coral_brain_a.fbx"
+  },
+  "scan_coral_brain_b": {
+    "source": "Poly Haven: si_brain_grooved",
+    "licence": "CC0",
+    "tris": 3000,
+    "source_tris": 150000,
+    "size_m": [
+      0.83,
+      0.83,
+      0.9
+    ],
+    "maps": [
+      "albedo",
+      "normal"
+    ],
+    "file": "Scanned/scan_coral_brain_b/scan_coral_brain_b.fbx"
+  },
+  "scan_coral_finger": {
+    "source": "Poly Haven: si_finger",
+    "licence": "CC0",
+    "tris": 3500,
+    "source_tris": 150000,
+    "size_m": [
+      0.7,
+      0.63,
+      0.61
+    ],
+    "maps": [
+      "albedo",
+      "normal"
+    ],
+    "file": "Scanned/scan_coral_finger/scan_coral_finger.fbx"
+  },
+  "scan_coral_madrepora": {
+    "source": "Poly Haven: si_madrepora",
+    "licence": "CC0",
+    "tris": 3499,
+    "source_tris": 150000,
+    "size_m": [
+      0.54,
+      0.36,
+      0.6
+    ],
+    "maps": [
+      "albedo",
+      "normal"
+    ],
+    "file": "Scanned/scan_coral_madrepora/scan_coral_madrepora.fbx"
+  }
+}

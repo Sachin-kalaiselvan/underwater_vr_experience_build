@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using Abyss.Activities;
 using Abyss.Audio;
 using Abyss.Environment;
@@ -20,6 +21,8 @@ namespace Abyss.EditorTools
         public class Content
         {
             public Material World, WorldTwoSided, WorldGlow, Fish, Highlight, Fade, Beam, Snow;
+            public Material Seafloor, Coral, CoralTwoSided, Rust;
+            public Dictionary<string, Material> Scans = new Dictionary<string, Material>();
             public Dictionary<string, UnderwaterProfile> Profiles = new Dictionary<string, UnderwaterProfile>();
             public Dictionary<string, InteractableDefinition> Defs = new Dictionary<string, InteractableDefinition>();
             public ActivityCatalog Catalog;
@@ -42,7 +45,24 @@ namespace Abyss.EditorTools
             c.Fade = Mat("M_FadeOverlay", "ABYSS/FadeOverlay");
             c.Beam = Mat("M_MarkerBeam", "ABYSS/MarkerBeam");
             c.Snow = Mat("M_MarineSnow", "ABYSS/MarineSnow");
-            foreach (var m in new[] { c.World, c.WorldTwoSided, c.WorldGlow, c.Fish }) { m.enableInstancing = true; EditorUtility.SetDirty(m); }
+            // scanned surface detail (poly haven, CC0) on top of the vertex colour look
+            c.Seafloor = Mat("M_Seafloor", "ABYSS/UnderwaterVertexLit", m => Detail(m, "PLANAR", "coast_sand_01", 0.32f, 0.9f, 1.0f));
+            c.Coral = Mat("M_Coral", "ABYSS/UnderwaterVertexLit", m => Detail(m, "TRIPLANAR", "coral_ground_02", 2.2f, 0.45f, 1f));
+            c.CoralTwoSided = Mat("M_CoralTwoSided", "ABYSS/UnderwaterVertexLit", m => { Detail(m, "TRIPLANAR", "coral_ground_02", 2.2f, 0.4f, 1f); m.SetFloat("_Cull", 0); });
+            c.Rust = Mat("M_Rust", "ABYSS/UnderwaterVertexLit", m => Detail(m, "TRIPLANAR", "rusty_metal_02", 1.5f, 0.8f, 1f));
+            foreach (var guid in AssetDatabase.FindAssets("t:Model", new[] { "Assets/ABYSS/Art/Scanned" }))
+            {
+                var path = AssetDatabase.GUIDToAssetPath(guid);
+                var name = System.IO.Path.GetFileNameWithoutExtension(path);
+                var dir = System.IO.Path.GetDirectoryName(path).Replace('\\', '/');
+                c.Scans[name] = Mat("M_" + name, "ABYSS/UnderwaterTextured", m =>
+                {
+                    m.SetTexture("_BaseMap", AssetDatabase.LoadAssetAtPath<Texture2D>($"{dir}/{name}_albedo.jpg"));
+                    m.SetTexture("_BumpMap", AssetDatabase.LoadAssetAtPath<Texture2D>($"{dir}/{name}_normal.jpg"));
+                    if (name.Contains("compass")) m.SetFloat("_Spec", 0.35f); // brass catches a bit of light
+                });
+            }
+            foreach (var m in new[] { c.World, c.WorldTwoSided, c.WorldGlow, c.Fish, c.Seafloor, c.Coral, c.CoralTwoSided, c.Rust }.Concat(c.Scans.Values)) { m.enableInstancing = true; EditorUtility.SetDirty(m); }
 
             // area looks. each one is tuned to stay readable, deep included (min ambient floor)
             c.Profiles["descent"] = Profile("Underwater_Descent", new Color(0.06f, 0.33f, 0.40f), 0.026f, new Color(0.36f, 0.62f, 0.66f), new Color(0.15f, 0.36f, 0.42f), new Color(0.10f, 0.16f, 0.16f), 1.25f, 1f, 0.08f);
@@ -56,8 +76,6 @@ namespace Abyss.EditorTools
                 "Brain corals are colonies of many tiny animals living together. The grooves are where neighbouring polyps share tissue. A colony this size can be decades old.", false);
             Def(c, "reef_sea_fan", "Sea fan", "Faces into the current",
                 "Sea fans grow as a flat net, usually side-on to the water flow. That way every branch gets a share of the tiny food drifting past.", false);
-            Def(c, "reef_giant_clam", "Giant clam", "Partly powered by sunlight",
-                "The coloured tissue between the shells holds algae that turn sunlight into food for the clam. That's why giant clams live in shallow, bright water.", true, 0.45f);
             Def(c, "reef_staghorn", "Branching coral", "Shelter for small fish",
                 "Branching corals grow fast and build a maze of gaps that small fish use to hide. They are also some of the most fragile corals on a reef.", false);
             Def(c, "exhibit_light", "Light underwater", "Why everything turns blue",
@@ -66,8 +84,10 @@ namespace Abyss.EditorTools
                 "Every ten metres of seawater adds roughly the weight of the whole atmosphere again. Animals in the deep are built for it, people need equipment.", false);
             Def(c, "exhibit_currents", "Currents", "The ocean is always moving",
                 "Currents carry heat, food and larvae across huge distances. The swaying kelp and drifting particles around you show the water moving.", false);
-            Def(c, "wreck_bell", "Ship's bell", "A sample object for inspection",
-                "Bells were used to keep time on board and signal in fog. The green patches are what happens to brass after years in seawater. Turn it around and look at the crown and lip.", true, 0.4f);
+            Def(c, "wreck_compass", "Ship's compass", "A sample object for inspection",
+                "A brass compass in its wooden case. Brass holds up well in seawater compared to iron, which is why fittings like this are often what survives of a wreck. Turn it over and look at the case and the card.", true, 0.35f);
+            Def(c, "reef_conch", "Conch shell", "Built in layers",
+                "The shell grows in a spiral, adding new layers at the opening as the animal gets bigger. The flared lip only forms once it's fully grown.", true, 0.3f);
             Def(c, "wreck_anchor", "Anchor", "Where the ship stopped",
                 "This anchor lies a few metres from the hull. Its position is a clue for how the ship came to rest. (Sample content: replace with the client's own story.)", false);
             Def(c, "deep_anemone", "Glowing anemone", "Making its own light",
@@ -79,13 +99,13 @@ namespace Abyss.EditorTools
             c.Catalog = Load<ActivityCatalog>(Data + "/ActivityCatalog.asset", out bool newCatalog);
             var a1 = Activity("discover_reef", "Discover the reef", 3,
                 "Three things on this reef are worth a closer look. Find them.",
-                "You've found the brain coral, the sea fan and the giant clam.",
-                new ActivityDefinition.Step { Id = "find_three", Kind = StepKind.Discover, Instruction = "Find and select the brain coral, the sea fan and the giant clam", CompletionText = "All three found", TargetIds = { "reef_brain_coral", "reef_sea_fan", "reef_giant_clam" }, RequireAllTargets = true });
+                "You've found the brain coral, the sea fan and the conch shell.",
+                new ActivityDefinition.Step { Id = "find_three", Kind = StepKind.Discover, Instruction = "Find and select the brain coral, the sea fan and the conch shell", CompletionText = "All three found", TargetIds = { "reef_brain_coral", "reef_sea_fan", "reef_conch" }, RequireAllTargets = true });
             var a2 = Activity("inspect_object", "Take a closer look", 3,
                 "Head to the wreck and examine an object up close.",
-                "You've inspected the ship's bell up close.",
+                "You've inspected the ship's compass up close.",
                 new ActivityDefinition.Step { Id = "go_wreck", Kind = StepKind.ReachDestination, Instruction = "Go to the wreck. Follow the arrow and the light on the sea floor", CompletionText = "You're at the wreck", TargetIds = { "dest_wreck" } },
-                new ActivityDefinition.Step { Id = "inspect_bell", Kind = StepKind.Inspect, Instruction = "Select the ship's bell, choose Inspect, turn it with the thumbstick, then press Done", CompletionText = "Inspection complete", TargetIds = { "wreck_bell" } });
+                new ActivityDefinition.Step { Id = "inspect_compass", Kind = StepKind.Inspect, Instruction = "Select the ship's compass, choose Inspect, turn it with the thumbstick, then press Done", CompletionText = "Inspection complete", TargetIds = { "wreck_compass" } });
             var a3 = Activity("guided_tour", "Guided exploration", 6,
                 "A short tour through the exhibition, the wreck and the deep.",
                 "You've visited the exhibition, the wreck and the deep.",
@@ -115,6 +135,20 @@ namespace Abyss.EditorTools
             if (m == null) { m = new Material(sh); setup?.Invoke(m); AssetDatabase.CreateAsset(m, path); }
             else if (m.shader != sh) m.shader = sh;
             return m;
+        }
+
+        const string ScanTex = "Assets/ABYSS/Art/Textures/Scanned";
+
+        static void Detail(Material m, string mode, string tex, float tiling, float strength, float normal)
+        {
+            m.SetFloat("_Detail", mode == "PLANAR" ? 1 : 2);
+            m.EnableKeyword("_DETAIL_" + mode);
+            m.DisableKeyword("_DETAIL_OFF");
+            m.SetTexture("_DetailMap", AssetDatabase.LoadAssetAtPath<Texture2D>($"{ScanTex}/{tex}_diff_1k.jpg"));
+            m.SetTexture("_DetailNormal", AssetDatabase.LoadAssetAtPath<Texture2D>($"{ScanTex}/{tex}_nor_gl_1k.jpg"));
+            m.SetFloat("_DetailTiling", tiling);
+            m.SetFloat("_DetailStrength", strength);
+            m.SetFloat("_DetailNormalScale", normal);
         }
 
         static T Load<T>(string path, out bool created) where T : ScriptableObject
