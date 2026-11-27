@@ -1,0 +1,254 @@
+{
+  "seafloor_terrain": {
+    "file": "Environment/seafloor_terrain.fbx",
+    "tris": 26000,
+    "size_m": [
+      150.01,
+      150.01,
+      33.17
+    ]
+  },
+  "rock_boulder_a": {
+    "file": "Environment/rock_boulder_a.fbx",
+    "tris": 900,
+    "size_m": [
+      3.4,
+      2.47,
+      1.26
+    ]
+  },
+  "rock_boulder_b": {
+    "file": "Environment/rock_boulder_b.fbx",
+    "tris": 900,
+    "size_m": [
+      2.66,
+      2.75,
+      2.04
+    ]
+  },
+  "rock_slab_a": {
+    "file": "Environment/rock_slab_a.fbx",
+    "tris": 900,
+    "size_m": [
+      5.1,
+      2.99,
+      0.95
+    ]
+  },
+  "rock_spire_a": {
+    "file": "Environment/rock_spire_a.fbx",
+    "tris": 900,
+    "size_m": [
+      2.05,
+      2.38,
+      3.14
+    ]
+  },
+  "rock_cluster_a": {
+    "file": "Environment/rock_cluster_a.fbx",
+    "tris": 900,
+    "size_m": [
+      3.14,
+      3.65,
+      1.65
+    ]
+  },
+  "rock_arch": {
+    "file": "Environment/rock_arch.fbx",
+    "tris": 896,
+    "size_m": [
+      13.05,
+      4.36,
+      6.44
+    ]
+  },
+  "coral_brain": {
+    "file": "Coral/coral_brain.fbx",
+    "tris": 1800,
+    "size_m": [
+      1.43,
+      1.32,
+      0.72
+    ]
+  },
+  "coral_staghorn": {
+    "file": "Coral/coral_staghorn.fbx",
+    "tris": 2599,
+    "size_m": [
+      0.68,
+      0.73,
+      0.94
+    ]
+  },
+  "coral_table": {
+    "file": "Coral/coral_table.fbx",
+    "tris": 1216,
+    "size_m": [
+      1.72,
+      1.48,
+      0.48
+    ]
+  },
+  "coral_seafan": {
+    "file": "Coral/coral_seafan.fbx",
+    "tris": 1016,
+    "size_m": [
+      1.55,
+      0.04,
+      1.26
+    ]
+  },
+  "sponge_barrel": {
+    "file": "Coral/sponge_barrel.fbx",
+    "tris": 616,
+    "size_m": [
+      0.92,
+      0.92,
+      0.9
+    ]
+  },
+  "kelp_strand": {
+    "file": "Environment/kelp_strand.fbx",
+    "tris": 44,
+    "size_m": [
+      0.46,
+      0.1,
+      5.5
+    ]
+  },
+  "seagrass_clump": {
+    "file": "Environment/seagrass_clump.fbx",
+    "tris": 208,
+    "size_m": [
+      0.6,
+      0.64,
+      0.78
+    ]
+  },
+  "anemone_glow": {
+    "file": "Coral/anemone_glow.fbx",
+    "tris": 738,
+    "size_m": [
+      0.41,
+      0.41,
+      0.41
+    ]
+  },
+  "basalt_columns": {
+    "file": "Environment/basalt_columns.fbx",
+    "tris": 220,
+    "size_m": [
+      3.78,
+      3.99,
+      4.75
+    ]
+  },
+  "tube_worms": {
+    "file": "Coral/tube_worms.fbx",
+    "tris": 756,
+    "size_m": [
+      0.8,
+      0.69,
+      1.01
+    ]
+  },
+  "giant_clam": {
+    "file": "InteractiveObjects/giant_clam.fbx",
+    "tris": 2648,
+    "size_m": [
+      1.05,
+      0.47,
+      0.33
+    ]
+  },
+  "ships_bell": {
+    "file": "InteractiveObjects/ships_bell.fbx",
+    "tris": 2160,
+    "size_m": [
+      0.34,
+      0.34,
+      0.42
+    ]
+  },
+  "info_marker": {
+    "file": "InteractiveObjects/info_marker.fbx",
+    "tris": 704,
+    "size_m": [
+      0.6,
+      0.58,
+      0.39
+    ]
+  },
+  "destination_ring": {
+    "file": "InteractiveObjects/destination_ring.fbx",
+    "tris": 576,
+    "size_m": [
+      2.08,
+      2.08,
+      0.03
+    ]
+  },
+  "destination_beam": {
+    "file": "InteractiveObjects/destination_beam.fbx",
+    "tris": 48,
+    "size_m": [
+      1.8,
+      1.8,
+      4.0
+    ]
+  },
+  "wreck_hull": {
+    "file": "Structures/wreck_hull.fbx",
+    "tris": 4392,
+    "size_m": [
+      6.17,
+      14.16,
+      2.2
+    ]
+  },
+  "wreck_mast": {
+    "file": "Structures/wreck_mast.fbx",
+    "tris": 180,
+    "size_m": [
+      8.06,
+      5.97,
+      2.92
+    ]
+  },
+  "wreck_anchor": {
+    "file": "Structures/wreck_anchor.fbx",
+    "tris": 774,
+    "size_m": [
+      1.4,
+      0.25,
+      1.72
+    ]
+  },
+  "wreck_crate": {
+    "file": "Structures/wreck_crate.fbx",
+    "tris": 192,
+    "size_m": [
+      0.93,
+      1.04,
+      0.77
+    ]
+  },
+  "fish_small": {
+    "file": "MarineLife/fish_small.fbx",
+    "tris": 89,
+    "size_m": [
+      0.05,
+      0.27,
+      0.09
+    ]
+  },
+  "ray_large": {
+    "file": "MarineLife/ray_large.fbx",
+    "tris": 328,
+    "size_m": [
+      4.03,
+      3.35,
+      0.39
+    ]
+  }
+}

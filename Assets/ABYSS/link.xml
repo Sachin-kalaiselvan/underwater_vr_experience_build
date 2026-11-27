@@ -1,0 +1,5 @@
+<!-- ComfortController sets ControllerInputActionManager.smoothMotionEnabled/smoothTurnEnabled by reflection,
+     so keep the starter assets assembly from getting stripped in IL2CPP builds -->
+<linker>
+  <assembly fullname="Unity.XR.Interaction.Toolkit.Samples.StarterAssets" preserve="all" />
+</linker>
