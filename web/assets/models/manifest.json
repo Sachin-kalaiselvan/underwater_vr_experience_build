@@ -1,0 +1,42 @@
+{
+ "height": {
+  "n": 256,
+  "half": 75.0,
+  "min": -13.236495971679688,
+  "max": 19.180404663085938
+ },
+ "scans": [
+  "scan_barrel",
+  "scan_boulder",
+  "scan_boulder_flat",
+  "scan_compass",
+  "scan_conch",
+  "scan_coral_acropora",
+  "scan_coral_brain_a",
+  "scan_coral_brain_b",
+  "scan_coral_cauliflower",
+  "scan_coral_finger",
+  "scan_coral_madrepora",
+  "scan_coral_montipora",
+  "scan_coral_pocillopora",
+  "scan_coral_staghorn",
+  "scan_crate",
+  "scan_rock_coast",
+  "scan_rock_outcrop",
+  "scan_shipwreck"
+ ],
+ "generated": [
+  "seafloor_terrain",
+  "seagrass_clump",
+  "kelp_strand",
+  "basalt_columns",
+  "coral_seafan",
+  "anemone_glow",
+  "tube_worms",
+  "wreck_anchor",
+  "fish_small",
+  "ray_large",
+  "destination_ring",
+  "info_marker"
+ ]
+}

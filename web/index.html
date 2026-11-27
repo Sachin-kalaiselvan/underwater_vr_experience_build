@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>ABYSS — an underwater exhibition</title>
+<meta name="description" content="ABYSS is an interactive underwater exhibition you can explore in the browser or in VR. Real scanned coral, rock and a shipwreck, guided activities, and a cinematic tour.">
+<meta property="og:title" content="ABYSS — an underwater exhibition">
+<meta property="og:description" content="Explore a reef, a shipwreck and the deep. In your browser or in VR.">
+<meta name="theme-color" content="#061820">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<script type="importmap">
+{ "imports": { "three": "./vendor/three/three.module.js", "three/addons/": "./vendor/three/addons/" } }
+</script>
+</head>
+<body>
+<canvas id="view"></canvas>
+
+<!-- loader / title -->
+<section id="loader" class="screen">
+  <div class="loader-inner">
+    <p class="eyebrow">An underwater exhibition</p>
+    <h1 class="wordmark"><span>A</span><span>B</span><span>Y</span><span>S</span><span>S</span></h1>
+    <p class="lede">A reef, a shipwreck and the deep, built from real scanned coral and rock.</p>
+    <div class="progress"><div class="progress-fill" id="load-fill"></div></div>
+    <p class="load-label" id="load-label">Loading the sea floor…</p>
+    <div class="start-row" id="start-row">
+      <button class="btn primary" id="btn-dive">Dive in</button>
+      <button class="btn ghost" id="btn-tour-start">Watch the tour</button>
+    </div>
+    <p class="fine">Sound on for the full thing. Works in VR on Meta Quest.</p>
+  </div>
+</section>
+
+<!-- app chrome -->
+<div id="ui" class="hidden">
+  <header class="topbar">
+    <div class="brand"><span class="brand-mark"></span>ABYSS</div>
+    <nav class="tabs" id="tabs">
+      <button data-view="explore" class="active">Explore</button>
+      <button data-view="guided">Guided</button>
+      <button data-view="tour">Tour</button>
+      <button data-view="about">About</button>
+      <span class="tab-ink" id="tab-ink"></span>
+    </nav>
+    <div class="top-right">
+      <div class="chip" id="chip-disc" title="Things you've found"><span class="chip-num" id="disc-num">0</span><span>/ <span id="disc-total">0</span> found</span></div>
+      <div class="chip area" id="chip-area">The Descent</div>
+      <button class="icon-btn" id="btn-sound" title="Sound"><svg viewBox="0 0 24 24"><path d="M4 9v6h4l5 4V5L8 9H4z"/><path class="wave" d="M16 8.5a5 5 0 0 1 0 7M18.5 6a8.5 8.5 0 0 1 0 12"/></svg></button>
+    </div>
+  </header>
+
+  <!-- side panels -->
+  <aside class="panel" id="panel-guided">
+    <p class="eyebrow">Guided activities</p>
+    <h2>Pick one</h2>
+    <p class="muted">Short, self-paced. The guide at the top of the screen shows where to go next. Sample content, ready to swap for a real curriculum.</p>
+    <div id="activity-list" class="activity-list"></div>
+  </aside>
+
+  <aside class="panel" id="panel-about">
+    <p class="eyebrow">About</p>
+    <h2>ABYSS</h2>
+    <p>An interactive underwater exhibition with five connected areas: the Descent, the Reef, an Exhibition clearing, a Shipwreck and the Deep. Built as a Meta Quest app in Unity; this is the browser version of the same world, with the same assets.</p>
+    <p>The corals are photoscans of real specimens from the Smithsonian's coral collection. Rocks, props and the ship are photoscans from Poly Haven. All CC0.</p>
+    <h3>Controls</h3>
+    <dl class="keys">
+      <dt>Drag</dt><dd>look around</dd>
+      <dt>W A S D</dt><dd>swim</dd>
+      <dt>Q / E</dt><dd>down / up</dd>
+      <dt>Click</dt><dd>select something that glows</dd>
+      <dt>H</dt><dd>hide the interface</dd>
+      <dt>R</dt><dd>back to the start point</dd>
+    </dl>
+    <h3>Comfort</h3>
+    <div class="toggles">
+      <label class="toggle"><input type="checkbox" id="opt-motion"><span></span>Reduced motion</label>
+      <label class="toggle"><input type="checkbox" id="opt-quality"><span></span>Lighter graphics</label>
+      <label class="toggle"><input type="checkbox" id="opt-contrast"><span></span>High contrast text</label>
+    </div>
+    <button class="btn ghost small" id="btn-reset">Reset my progress</button>
+  </aside>
+
+  <!-- activity hud -->
+  <div class="hud" id="hud">
+    <div class="hud-top"><span id="hud-title"></span><span id="hud-count"></span></div>
+    <p class="hud-step" id="hud-step"></p>
+    <div class="hud-bar"><div id="hud-fill"></div></div>
+    <div class="hud-guide"><span class="arrow" id="hud-arrow">↑</span><span id="hud-dist"></span><button class="link" id="hud-stop">Stop</button></div>
+  </div>
+
+  <!-- info card -->
+  <article class="card" id="card">
+    <p class="eyebrow" id="card-tag">Sample content</p>
+    <h2 id="card-title"></h2>
+    <p class="sub" id="card-sub"></p>
+    <p id="card-body"></p>
+    <div class="card-actions">
+      <button class="btn primary small" id="card-inspect">Inspect</button>
+      <button class="btn ghost small" id="card-close">Close</button>
+    </div>
+  </article>
+
+  <!-- inspect hint -->
+  <div class="inspect-bar" id="inspect-bar"><span>Drag to turn it around</span><button class="btn primary small" id="inspect-done">Done</button></div>
+
+  <div class="hint" id="hint">Drag to look · WASD to swim · click anything that glows</div>
+  <button class="btn vr" id="btn-vr" hidden>Enter VR</button>
+</div>
+
+<!-- tour captions + letterbox -->
+<div class="letterbox top"></div><div class="letterbox bottom"></div>
+<div class="caption" id="caption"><p class="eyebrow" id="cap-kicker"></p><h2 id="cap-title"></h2><p id="cap-body"></p></div>
+<button class="btn ghost small tour-exit" id="tour-exit">Exit tour</button>
+
+<div class="toast" id="toast"></div>
+
+<div class="modal" id="done-modal">
+  <div class="modal-inner">
+    <svg class="tick" viewBox="0 0 52 52"><circle cx="26" cy="26" r="24"/><path d="M15 27l7 7 15-16"/></svg>
+    <p class="eyebrow">Activity complete</p>
+    <h2 id="done-title"></h2>
+    <p id="done-body" class="muted"></p>
+    <div class="card-actions center">
+      <button class="btn primary small" id="done-explore">Keep exploring</button>
+      <button class="btn ghost small" id="done-again">Do it again</button>
+    </div>
+  </div>
+</div>
+
+<div class="fade" id="fade"></div>
+<script type="module" src="js/main.js"></script>
+</body>
+</html>
