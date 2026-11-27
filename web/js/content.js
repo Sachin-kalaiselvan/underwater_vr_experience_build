@@ -68,6 +68,6 @@ export const TOUR = [
   { at: [52, 14, 3.0], look: [64, 2, 0], t: 74 },
   { at: [61, 3, 2.0], look: [70, 0, 0], t: 81, cap: ['The Deep', 'Light runs out', 'Basalt columns, tube worms and animals that make their own light.'] },
   { at: [68, 4, 1.4], look: [73, -2, 0.5], t: 90 },
-  { at: [66, -4, 4.5], look: [40, 0, 6], t: 100, cap: ['ABYSS', 'Browser and Meta Quest', 'One world, two ways in.'] },
-  { at: [62, -4, 6.0], look: [30, 0, 9], t: 108 },
+  { at: [64, 5, 4.5], look: [40, 2, 6], t: 100, cap: ['ABYSS', 'Browser and Meta Quest', 'One world, two ways in.'] },
+  { at: [59, 6, 6.0], look: [30, 2, 9], t: 108 },
 ];

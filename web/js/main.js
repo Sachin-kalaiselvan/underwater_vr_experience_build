@@ -537,7 +537,7 @@ function showXRPanel(item) {
 const clock = new THREE.Clock();
 let elapsed = 0;
 function frame() { step(Math.min(clock.getDelta(), 0.05)); }
-function step(dt) {
+function step(dt, draw = true) {
   elapsed += dt;
   for (let i = tweens.length - 1; i >= 0; i--) {
     const tw = tweens[i]; tw.t += dt;
@@ -564,8 +564,8 @@ function step(dt) {
   if (!xr) updateHover(elapsed);
   updateGuide(head, Math.atan2(-dir.x, -dir.z));
   updateArea();
-  renderer.render(world.scene, camera);
+  if (draw) renderer.render(world.scene, camera);
 }
 
 // capture mode: the page doesn't run its own loop, the recorder steps it frame by frame
-function captureStep(dt) { step(dt); return tourT; }
+function captureStep(dt, draw = true) { step(dt, draw); return tourT; }
